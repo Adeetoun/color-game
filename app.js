@@ -66,8 +66,6 @@ function confirmColor(selectedColor) {
 
     if (trials === 0 && selectedColorHex === correctColor) {
       const selectedColorHex = rgbToHex(selectedColor);
-      console.log(correctColor);
-      console.log(selectedColorHex);
 
       gameStatus.textContent = "You are Correct! 🎉. Game over!";
       gameStatus.classList.add("celebrate");
