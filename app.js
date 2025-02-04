@@ -64,12 +64,19 @@ function confirmColor(selectedColor) {
     trialsText.textContent = trials;
     scoreText.textContent = score;
 
-    if (trials === 0) {
-      if (selectedColor === correctColor) {
-        gameStatus.textContent = "You are Correct! 🎉. Game over!";
-      } else {
-        gameStatus.textContent = "Game over! 😔";
-      }
+    if (trials === 0 && selectedColorHex === correctColor) {
+      const selectedColorHex = rgbToHex(selectedColor);
+      console.log(correctColor);
+      console.log(selectedColorHex);
+
+      gameStatus.textContent = "You are Correct! 🎉. Game over!";
+      gameStatus.classList.add("celebrate");
+      setTimeout(() => {
+        gameStatus.classList.remove("celebrate");
+      }, 1000);
+      disableOptions();
+    } else if (trials === 0) {
+      gameStatus.textContent = "Game over! 😔";
       disableOptions();
     }
   }
