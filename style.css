@@ -1,0 +1,86 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: beige;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+}
+.container {
+  background-color: aliceblue;
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 20px;
+  width: 70%;
+  text-align: center;
+}
+h1 {
+  font-size: 16px;
+}
+h2 {
+  margin-top: 10px;
+  font-size: 16px;
+}
+p {
+  margin-top: 10px;
+}
+[data-testid="colorBox"] {
+  border: none;
+  border-radius: 5px;
+  height: 20vh;
+  width: 150px;
+  display: none;
+}
+.color-option {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+button {
+  padding: 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+button:hover {
+  opacity: 0.8;
+}
+[data-testid="score"] {
+  text-align: center;
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.fadeOut {
+  animation: fadeOut 2s ease-out;
+}
+@keyframes celebrate {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1.2;
+  }
+  100% {
+    ransform: scale(1);
+    opacity: 1;
+  }
+}
+.celebrate {
+  animation: celebrate 1s ease-out;
+}
