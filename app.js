@@ -1,11 +1,3 @@
-const colors = [
-  "#ff4500",
-  "#f99e7c",
-  "#804747",
-  "#7a0246",
-  "#f5e1ec",
-  "#7cd8f9",
-];
 const container = document.querySelector(".container");
 const colorBox = document.querySelector('[data-testid="colorBox"]');
 const colorOptions = document.querySelectorAll('[data-testid="colorOption"]');
@@ -15,40 +7,44 @@ const scoreText = document.querySelector('[data-testid="score"]');
 const trialsText = document.querySelector(".trial");
 let trials = 3;
 let score = 1;
-let correctColor = chooseCorrectColor();
+let correctColor = "";
 
-colorBox.style.background = "";
+function getContrastingColor() {
+  let r = Math.floor(Math.random() * 156) + 100;
+  let g = Math.floor(Math.random() * 156) + 100;
+  let b = Math.floor(Math.random() * 156) + 100;
 
-function setColor() {
-  colorOptions.forEach((option, index) => {
-    option.style.backgroundColor = colors[index];
-  });
+  return `rgb(${r}, ${g}, ${b})`;
 }
 
-colorOptions.forEach((option) => {
-  option.addEventListener("click", () =>
-    confirmColor(option.style.backgroundColor)
-  );
-});
-
-function rgbToHex(rgb) {
-  const result = rgb.match(/^rgb\((\d+), (\d+), (\d+)\)$/);
-  if (result) {
-    const r = parseInt(result[1]).toString(16).padStart(2, "0");
-    const g = parseInt(result[2]).toString(16).padStart(2, "0");
-    const b = parseInt(result[3]).toString(16).padStart(2, "0");
-    return `#${r}${g}${b}`;
+function shuffleColors() {
+  let shuffled = [];
+  while (shuffled.at.length < 6) {
+    const color = getContrastingColor();
+    if (!shuffled.includes(color)) {
+      shuffled.push(color);
+    }
   }
-  return rgb;
+  return shuffled;
+}
+
+function setColor() {
+  let shuffledColors = shuffleColors();
+
+  colorOptions.forEach((option, index) => {
+    option.style.backgroundColor = shuffledColors[index];
+    option.dataset.color = shuffledColors[index];
+
+    option.onclick = () => confirmColor(option.dataset.color);
+  });
+
+  correctColor = shuffledColors[0];
+  colorBox.style.backgroundColor = correctColor;
 }
 
 function confirmColor(selectedColor) {
-  const selectedColorHex = rgbToHex(selectedColor);
-
   if (trials > 0) {
-    if (selectedColorHex === correctColor) {
-      colorBox.style.display = "block";
-      colorBox.style.backgroundColor = selectedColor;
+    if (selectedColor === correctColor) {
       score++;
       trials--;
       gameStatus.textContent = "You are Correct! 🎉";
@@ -57,6 +53,13 @@ function confirmColor(selectedColor) {
       setTimeout(() => {
         gameStatus.classList.remove("celebrate");
       }, 1000);
+
+      if (trials > 0) {
+        setTimeout(updateColor, 500);
+      } else {
+        gameStatus.textContent = "You are Correct! 🎉. Game over!";
+        disableOptions();
+      }
     } else {
       trials--;
       gameStatus.textContent = "Wrong❌, Try Again.";
@@ -64,28 +67,12 @@ function confirmColor(selectedColor) {
     trialsText.textContent = trials;
     scoreText.textContent = score;
 
-    if (trials === 0 && selectedColorHex === correctColor) {
-      const selectedColorHex = rgbToHex(selectedColor);
-
-      gameStatus.textContent = "You are Correct! 🎉. Game over!";
-      gameStatus.classList.add("celebrate");
-      setTimeout(() => {
-        gameStatus.classList.remove("celebrate");
-      }, 1000);
-      disableOptions();
-    } else if (trials === 0) {
+    if (trials === 0 && selectedColor !== correctColor) {
       gameStatus.textContent = "Game over! 😔";
       disableOptions();
     }
   }
 }
-
-function chooseCorrectColor() {
-  const correctColor = colors[Math.floor(Math.random() * colors.length)];
-  console.log(correctColor);
-  return correctColor;
-}
-
 function disableOptions() {
   colorOptions.forEach((option) => {
     option.classList.remove("fadeOut");
@@ -99,17 +86,16 @@ function disableOptions() {
   }, 10);
 }
 
+function updateColor() {
+  setColor();
+}
+
 newGame.addEventListener("click", () => {
   trials = 3;
   score = 0;
   trialsText.textContent = trials;
   scoreText.textContent = score;
   gameStatus.textContent = "";
-
-  correctColor = chooseCorrectColor();
-  colorBox.style.display = "none";
-  colorBox.style.backgroundColor = "";
-  container.style.backgroundColor = "aliceblue";
 
   setColor();
 

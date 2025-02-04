@@ -36,7 +36,8 @@ p {
   border-radius: 5px;
   height: 20vh;
   width: 150px;
-  display: none;
+  margin: auto;
+  background-color: antiquewhite;
 }
 .color-option {
   display: grid;
@@ -49,9 +50,6 @@ button {
   cursor: pointer;
   border: none;
   border-radius: 5px;
-}
-button:hover {
-  opacity: 0.8;
 }
 [data-testid="score"] {
   text-align: center;
