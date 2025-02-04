@@ -32,6 +32,8 @@ function setColor() {
   let baseColor = getContrastingColor();
   let colorShades = getShade(baseColor);
 
+  correctColor = colorShades[Math.floor(Math.random() * colorShades.length)];
+
   colorOptions.forEach((option, index) => {
     option.style.backgroundColor = colorShades[index];
     option.dataset.color = colorShades[index];
@@ -39,7 +41,6 @@ function setColor() {
     option.onclick = () => confirmColor(option.dataset.color);
   });
 
-  correctColor = colorShades[0];
   colorBox.style.backgroundColor = correctColor;
 }
 
