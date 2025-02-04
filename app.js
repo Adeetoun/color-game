@@ -14,31 +14,32 @@ function getContrastingColor() {
   let g = Math.floor(Math.random() * 156) + 100;
   let b = Math.floor(Math.random() * 156) + 100;
 
-  return `rgb(${r}, ${g}, ${b})`;
+  return { r, g, b };
 }
 
-function shuffleColors() {
-  let shuffled = [];
-  while (shuffled.at.length < 6) {
-    const color = getContrastingColor();
-    if (!shuffled.includes(color)) {
-      shuffled.push(color);
-    }
+function getShade(baseColor) {
+  let shade = [];
+  for (let i = 0; i < 6; i++) {
+    let r = Math.min(255, Math.max(0, baseColor.r + (Math.random() * 50 - 25)));
+    let g = Math.min(255, Math.max(0, baseColor.g + (Math.random() * 50 - 25)));
+    let b = Math.min(255, Math.max(0, baseColor.b + (Math.random() * 50 - 25)));
+    shade.push(`rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`);
   }
-  return shuffled;
+  return shade;
 }
 
 function setColor() {
-  let shuffledColors = shuffleColors();
+  let baseColor = getContrastingColor();
+  let colorShades = getShade(baseColor);
 
   colorOptions.forEach((option, index) => {
-    option.style.backgroundColor = shuffledColors[index];
-    option.dataset.color = shuffledColors[index];
+    option.style.backgroundColor = colorShades[index];
+    option.dataset.color = colorShades[index];
 
     option.onclick = () => confirmColor(option.dataset.color);
   });
 
-  correctColor = shuffledColors[0];
+  correctColor = colorShades[0];
   colorBox.style.backgroundColor = correctColor;
 }
 
@@ -76,7 +77,7 @@ function confirmColor(selectedColor) {
 function disableOptions() {
   colorOptions.forEach((option) => {
     option.classList.remove("fadeOut");
-    option.style.pointerEvent = "none";
+    option.style.pointerEvents = "none";
   });
 
   setTimeout(() => {
@@ -97,10 +98,9 @@ newGame.addEventListener("click", () => {
   scoreText.textContent = score;
   gameStatus.textContent = "";
 
-  setColor();
-
   colorOptions.forEach((option) => {
-    option.style.pointerEvent = "auto";
+    option.style.pointerEvents = "auto";
+    option.classList.remove("fadeOut");
   });
 });
 
